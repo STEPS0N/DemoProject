@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DemoProject.Classes;
 using DemoProject.Services;
 using HakatonServer.Auth;
 using MsBox.Avalonia;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DemoProject.Views;
 
 
 namespace DemoProject.ViewModels
@@ -37,7 +39,7 @@ namespace DemoProject.ViewModels
             try
             {
                 var token = await _userService.Login(Email, Password);
-                await MessageBoxManager.GetMessageBoxStandard("Заголовок", "Успех").ShowAsync();
+                NavigationService.NavigateTo(new News());
             }
             catch (Exception ex)
             {

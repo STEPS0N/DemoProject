@@ -13,11 +13,11 @@ public partial class News : UserControl
     {
         InitializeComponent();
 
-        var items = new List<News>
+        var items = new List<Models.News>
         {
             new Models.News { Title = "Крупное обновление", Description = "Мы улучшили шифрование данных.", CreatedAt = DateTime.Now },
-            new News { Title = "Новые функции", Description = "Теперь можно управлять сессиями.", CreatedAt = DateTime.Now.AddDays(-1) },
-            new News { Title = "Технические работы", Description = "Серверы будут обновлены ночью.", CreatedAt = DateTime.Now.AddDays(-3) }
+            new Models.News { Title = "Новые функции", Description = "Теперь можно управлять сессиями.", CreatedAt = DateTime.Now.AddDays(-1) },
+            new Models.News { Title = "Технические работы", Description = "Серверы будут обновлены ночью.", CreatedAt = DateTime.Now.AddDays(-3) }
         };
 
         newsList.ItemsSource = items;
