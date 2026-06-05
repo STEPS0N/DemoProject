@@ -1,0 +1,102 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="using:DemoProject.Models"
+             xmlns:vm="using:DemoProject.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DemoProject.News"
+             x:DataType="vm:NewsViewModel">
+
+    <Design.DataContext>
+        <vm:NewsViewModel/>
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="Border.news-card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #00000010"/>
+        </Style>
+
+        <Style Selector="Button.smooth-btn-dark">
+            <Setter Property="Background" Value="#669E85"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="25,15"/>
+            <Setter Property="CornerRadius" Value="25"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Regular"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="btnBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Padding="{TemplateBinding Padding}"
+                            Cursor="Hand">
+                        
+                        <ContentPresenter Name="contentPresenter"
+                                          Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Background="Transparent"
+                                          Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.smooth-btn-dark /template/ Border">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.3"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.smooth-btn-dark:pointerover /template/ Border">
+            <Setter Property="Background" Value="#52806b"/>
+        </Style>
+
+        <Style Selector="Button.smooth-btn-dark:pressed /template/ Border">
+            <Setter Property="Background" Value="#436052"/>
+        </Style>
+    </UserControl.Styles>
+
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="models:News">
+            <Border Classes="news-card">
+                <StackPanel>
+                    <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="Bold" Foreground="#669E85" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding CreatedAt, StringFormat='{}{0:dd MMMM yyyy, HH:mm}'}" 
+                               FontSize="12" 
+                               Foreground="#A0A0A0"/>
+                    <TextBlock Text="{Binding Description}" 
+                               FontSize="14" 
+                               Foreground="#2D3436" 
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
+    <Grid Background="#F4F6F9" RowDefinitions="Auto, *">
+        <Border Grid.Row="0" Background="White" Padding="30, 20" BoxShadow="5 5 10 0 DarkGray">
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Content=" Обновить" Command="{Binding RefreshCommand}"
+                        Classes="smooth-btn-dark" Padding="20,10" CornerRadius="8"/>
+                <StackPanel Orientation="Horizontal" Spacing="15">
+                    <TextBlock Text="Новости" FontSize="26" FontWeight="Bold" 
+                               Foreground="#669E85" VerticalAlignment="Center"/>
+        </StackPanel>
+            </DockPanel>
+        </Border>
+        <ScrollViewer Grid.Row="1" Padding="30">
+            <ItemsControl ItemsSource="{Binding News}"/>
+        </ScrollViewer>
+    </Grid>
+
+</UserControl>
