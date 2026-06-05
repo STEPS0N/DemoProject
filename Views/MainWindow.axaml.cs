@@ -11,7 +11,6 @@ namespace DemoProject.Views
 
             NavigationService.Initialize(frame);
             NavigationService.NavigateTo(new Registration());
-            sfgsgsgs
         }
     }
 }
