@@ -34,5 +34,8 @@
     <Compile Update="Views\MainWindow.axaml.cs">
       <DependentUpon>MainWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\NewsPage.axaml.cs">
+      <DependentUpon>NewsPage.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
