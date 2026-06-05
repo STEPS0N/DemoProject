@@ -27,13 +27,14 @@ namespace DemoProject.ViewModels
 
         public NewsViewModel(NewsService newsService)
         {
-            _newsService = newsService; 
+            _newsService = newsService;
+            InitAsync();
         }
 
-        public async Task InitAsync(string token)
+        public async Task InitAsync()
         {
             await LoadNewsAsync();
-            await ConnectToHubAsync(token);
+            await ConnectToHubAsync();
         }
 
         [RelayCommand]
@@ -57,11 +58,11 @@ namespace DemoProject.ViewModels
 
         }
 
-        private async Task ConnectToHubAsync(string token)
+        private async Task ConnectToHubAsync()
         {
             try
             {
-                _hubService = new NewsHubService(token);
+                _hubService = new NewsHubService();
                 
                 _hubService.OnNewsReceived += (news) =>
                 {

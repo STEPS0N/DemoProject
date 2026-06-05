@@ -15,18 +15,10 @@ namespace DemoProject.Services
         public event Action<Models.News>? OnNewsReceived;
         public event Action<List<Models.News>>? OnNewsListReceived;
 
-        public NewsHubService(string token)
+        public NewsHubService()
         {
             _connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:7088/newsHub", options =>
-                {
-                    options.AccessTokenProvider = () => Task.FromResult(token)!;
-
-                    options.HttpMessageHandlerFactory = _ => new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback = (_, _, _, _) => true
-                    };
-                })
+                .WithUrl("https://localhost:7088/newsHub")
                 .WithAutomaticReconnect()
                 .Build();
 
@@ -35,12 +27,12 @@ namespace DemoProject.Services
 
         private void RegisterHandlers()
         {
-            _connection.On<Models.News>("ReceiveNews", news =>
+            _connection.On<Models.News>("UpdateNews", news =>
             {
                 OnNewsReceived?.Invoke(news);
             });
 
-            _connection.On<List<Models.News>>("ReceiveNewsList", newsList =>
+            _connection.On<List<Models.News>>("UpdateNews", newsList =>
             {
                 OnNewsListReceived?.Invoke(newsList);
             });

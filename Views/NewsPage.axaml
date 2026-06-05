@@ -86,8 +86,6 @@
     <Grid Background="#F4F6F9" RowDefinitions="Auto, *">
         <Border Grid.Row="0" Background="White" Padding="30, 20" BoxShadow="5 5 10 0 DarkGray">
             <DockPanel>
-                <Button DockPanel.Dock="Right" Content=" Обновить" Command="{Binding RefreshCommand}"
-                        Classes="smooth-btn-dark" Padding="20,10" CornerRadius="8"/>
                 <StackPanel Orientation="Horizontal" Spacing="15">
                     <TextBlock Text="Новости" FontSize="26" FontWeight="Bold" 
                                Foreground="#669E85" VerticalAlignment="Center"/>

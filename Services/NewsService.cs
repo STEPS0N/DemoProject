@@ -14,7 +14,7 @@ namespace DemoProject.Services
         public async Task<List<Models.News>> GetNewsAsync()
         {
 
-            var response = await Http.GetAsync("news/get");
+            var response = await Http.GetAsync("news");
 
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<List<Models.News>>() ?? new();
