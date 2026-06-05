@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="using:DemoProject.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="DemoProject.News">
+
+    <UserControl.Styles>
+        <Style Selector="Border.news-card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #00000010"/>
+        </Style>
+    </UserControl.Styles>
+
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="models:News">
+            <Border Classes="news-card">
+                <StackPanel>
+                    <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="Bold" Foreground="#669E85" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding CreatedAt, StringFormat='{}{0:dd MMMM yyyy, HH:mm}'}" 
+                               FontSize="12" 
+                               Foreground="#A0A0A0"/>
+                    <TextBlock Text="{Binding Description}" 
+                               FontSize="14" 
+                               Foreground="#2D3436" 
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
+    <Grid Background="#F4F6F9" RowDefinitions="Auto, *">
+        <Border Grid.Row="0" Background="White" Padding="30, 20" BoxShadow="5 5 10 0 DarkGray">
+            <StackPanel Orientation="Horizontal" Spacing="15">
+                <Label Content="Новости" FontSize="24" FontWeight="Bold" Foreground="#669E85" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+        <ScrollViewer Grid.Row="1" Padding="30">
+            <ItemsControl x:Name="newsList"/>
+        </ScrollViewer>
+    </Grid>
+
+</UserControl>
