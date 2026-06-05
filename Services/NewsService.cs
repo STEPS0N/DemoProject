@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,8 @@ namespace DemoProject.Services
     {
         public async Task<List<Models.News>> GetNewsAsync()
         {
-            var response = await Http.GetAsync("news");
+
+            var response = await Http.GetAsync("news/get");
 
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<List<Models.News>>() ?? new();
