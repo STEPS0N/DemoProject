@@ -15,6 +15,15 @@ namespace DemoProject.Services
             public string Email {  get; set; }
             public string Password { get; set; }
         }
+        public record RegisterRequest
+        {
+            public string? Name { get; set; }
+            public string? Lastname { get; set; }
+            public string? Patronymic { get; set; }
+            public string? Phone { get; set; }
+            public string? Email { get; set; }
+            public string? Password { get; set; }
+        }
         public record AuthResponse
         {
             public string Token { get; set; }
@@ -32,6 +41,30 @@ namespace DemoProject.Services
                 var authResponse = await response.Content.ReadFromJsonAsync<AuthResponse>();
                 return authResponse?.Token;
             } else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Ошибка входа: {error}");
+            }
+        }
+
+        public async Task<string?> Register(string name, string lastname, string patronymic, string phone, string email, string password)
+        {
+            var request = new RegisterRequest
+            {
+                Name = name,
+                Lastname = lastname,
+                Patronymic = patronymic,
+                Phone = phone,
+                Email = email,
+                Password = password
+            };
+            var response = await Http.PostAsJsonAsync("user/create", request);
+            if (response.IsSuccessStatusCode)
+            {
+                var authResponse = await response.Content.ReadFromJsonAsync<AuthResponse>();
+                return authResponse?.Token;
+            }
+            else
             {
                 var error = await response.Content.ReadAsStringAsync();
                 throw new Exception($"Ошибка входа: {error}");

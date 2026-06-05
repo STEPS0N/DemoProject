@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DemoProject.Models;
+using DemoProject.Services;
+using MsBox.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,37 +12,95 @@ using System.Threading.Tasks;
 
 namespace DemoProject.ViewModels
 {
-    public partial class NewsViewModel : ViewModelBase
+    public partial class NewsViewModel : ObservableObject
     {
+        private readonly NewsService _newsService;
+        private NewsHubService? _hubService;
         [ObservableProperty]
         private ObservableCollection<Models.News> _news = new ObservableCollection<Models.News>();
 
         [ObservableProperty]
         private bool _isLoading;
 
-        public NewsViewModel()
+        [ObservableProperty]
+        private bool _isConnected;
+
+        public NewsViewModel(NewsService newsService)
         {
-            LoadNews();
+            _newsService = newsService; 
         }
 
-        private void LoadNews()
+        public async Task InitAsync(string token)
+        {
+            await LoadNewsAsync();
+            await ConnectToHubAsync(token);
+        }
+
+        [RelayCommand]
+        private async Task LoadNewsAsync()
         {
             IsLoading = true;
 
-            News = new ObservableCollection<Models.News>
+            try
             {
-                new Models.News { Title = "Крупное обновление", Description = "Мы улучшили шифрование данных.", CreatedAt = DateTime.Now },
-                new Models.News { Title = "Новые функции", Description = "Теперь можно управлять сессиями.", CreatedAt = DateTime.Now.AddDays(-1) },
-                new Models.News { Title = "Технические работы", Description = "Серверы будут обновлены ночью.", CreatedAt = DateTime.Now.AddDays(-3) }
-            };
+                var newsList = await _newsService.GetNewsAsync();
+                News = new ObservableCollection<Models.News>(newsList);
+            } 
+            catch(Exception ex)
+            {
+                await MessageBoxManager.GetMessageBoxStandard("Заголовок", $"{ex.Message}").ShowAsync();
+            }
+            finally
+            {
+                IsLoading = false;
+            }
 
-            IsLoading = false;
+        }
+
+        private async Task ConnectToHubAsync(string token)
+        {
+            try
+            {
+                _hubService = new NewsHubService(token);
+                
+                _hubService.OnNewsReceived += (news) =>
+                {
+                    Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                    {
+                        News.Insert(0, news);
+                    });
+                };
+
+                _hubService.OnNewsListReceived += (newsList) =>
+                {
+                    Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                    {
+                        News = new ObservableCollection<Models.News>(newsList);
+                    });
+                };
+
+                await _hubService.StartAsync();
+                IsConnected = true;
+            }
+            catch (Exception ex)
+            {
+                await MessageBoxManager.GetMessageBoxStandard("Заголовок", $"{ex.Message}").ShowAsync();
+            }
         }
 
         [RelayCommand]
         private void Refresh()
         {
-            LoadNews();
+            LoadNewsAsync();
+        }
+
+        public async Task DisconnectAsync()
+        {
+            if(_hubService != null)
+            {
+                await _hubService.StopAsync();
+                IsConnected = false;
+            }
         }
     }
 }
