@@ -2,8 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:DemoProject.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="DemoProject.Authorisation"
+             x:DataType="vm:Login_VM"
              MinWidth="800"
              MinHeight="450"
              CornerRadius="15">
@@ -195,10 +197,10 @@
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
                 <Label FontSize="25" Foreground="#669E85" Content="Войти в аккаунт" Margin="0,0,0,20"
                        FontWeight="Bold" HorizontalContentAlignment="Center" Padding="0"/>
-                <TextBox Classes="styled-input" PlaceholderText="Email" Width="300"/>
-                <TextBox Classes="styled-input" PlaceholderText="Пароль" Width="300"/>
+                <TextBox Classes="styled-input" Text="{Binding Email}" PlaceholderText="Email"  Width="300"/>
+                <TextBox Classes="styled-input" Text="{Binding Password}" PlaceholderText="Пароль" Width="300"/>
                 <Button Classes="underline-btn" Content="Узнать подробнее" HorizontalAlignment="Center" Width="200"/>
-                <Button Classes="smooth-btn-dark" Content="Вход" HorizontalAlignment="Center"
+                <Button Classes="smooth-btn-dark" Command="{Binding LoginCommand}" IsEnabled="{Binding !IsLoading}" Content="Вход" HorizontalAlignment="Center"
                         Width="220" Margin="20"/>
             </StackPanel>
         </Grid>
