@@ -16,6 +16,16 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
+    <Window.Styles>
+        <Style Selector="ContentControl#frame">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.3"/>
+                </Transitions>
+            </Setter>
+        </Style>
+    </Window.Styles>
+
     <Grid>
         <ContentControl x:Name="frame"/>
     </Grid>
